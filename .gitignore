@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+detail_sample.html
+test_*.py
+parse_*.py
+scraper_fast.py
+scraper.py
