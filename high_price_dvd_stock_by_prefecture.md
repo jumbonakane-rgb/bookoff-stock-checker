@@ -5030,3 +5030,74 @@
 
 ---
 
+## 確認保留
+
+商品ページとの照合を完了できなかった商品: **65** 件
+
+| 元リストNo | 商品タイトル | 価格 (中古) | 保留理由 | 詳細リンク |
+| :--- | :--- | :--- | :--- | :--- |
+| 7 | 男はつらいよ 50周年記念 復刻 “寅んく" 4Kデジタル修復版ブルーレイ全巻ボックス(Blu-ray Disc) | ¥187,000 円 定価より22,000円（10%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0019267445) |
+| 26 | THE LIVE EIKICHI YAZAWA DVD BOX | ¥99,000 円 | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016094371) |
+| 43 | 男はつらいよ HDリマスター版 復刻“寅んく" | ¥88,000 円 定価より121,000円（57%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015905416) |
+| 58 | 超神伝説 うろつき童子 レジェンドBOXⅡ | ¥77,000 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016253546) |
+| 63 | 「北斗の拳」25周年記念DVD-BOX “TVシリーズHDリマスターエディション"海洋堂製25th.Anniversary Edition ケンシロウ&黒王特大フィギュア付(初回限定版) | ¥77,000 円 定価より55,000円（41%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015670331) |
+| 76 | 愛蔵版 くりいむレモン DVD大全集BOX 上巻 | ¥71,500 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0001239468) |
+| 101 | 高畑勲監督作品集(Blu-ray Disc) | ¥62,700 円 定価より3,300円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0017244466) |
+| 102 | 疾風！アイアンリーガー Blu-ray BOX(Blu-ray Disc) | ¥62,700 円 定価より3,300円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0019899974) |
+| 104 | 超神伝説 うろつき童子 レジェンドBOX1 | ¥61,600 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016233764) |
+| 123 | 森田芳光 全監督作品コンプリート(の・ようなもの)Blu-ray BOX(完全限定版)(Blu-ray Disc) | ¥61,600 円 定価より48,400円（44%）おトク | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0019670133) |
+| 147 | 古畑任三郎 COMPLETE Blu-ray BOX(数量限定生産版)(Blu-ray Disc) | ¥55,594 円 定価より2,926円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0017104076) |
+| 192 | 超神伝説 うろつき童子 レジェンドBOXⅢ | ¥52,800 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016268024) |
+| 199 | ジブリがいっぱい 監督もいっぱい コレクション(Blu-ray Disc) | ¥52,250 円 定価より2,750円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0019754675) |
+| 200 | 帰ってきたウルトラマン Blu-ray BOX(Blu-ray Disc) | ¥52,041 円 定価より2,739円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0017368735) |
+| 214 | 愛蔵版 くりいむレモン DVD大全集BOX 下巻 | ¥50,600 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0001240939) |
+| 226 | 時代を物語る未来への遺産 日本の国賓 至賓 DVD全20集 | ¥50,600 円 定価より138,400円（73%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0020703274) |
+| 227 | ハヤテのごとく！ Blu-ray BOX1(Blu-ray Disc) | ¥50,160 円 定価より2,640円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0017425944) |
+| 231 | ULTRAMAN ARCHIVES ウルトラQ UHD & MovieNEX(4K ULTRA HD+Blu-ray Disc) | ¥48,400 円 定価より28,600円（37%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0019324360) |
+| 262 | 遺作・臭作・鬼作 おやぢBROTHERS COMPLETE BOX | ¥48,400 円 定価より14,300円（22%）おトク | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016049454) |
+| 265 | 「夜会」DVD 全8巻 | ¥48,400 円 定価より17,050円（26%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016869907) |
+| 272 | ウルトラマンティガ Complete Blu-ray BOX(Blu-ray Disc) | ¥47,025 円 定価より2,475円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0017169914) |
+| 273 | 宮崎駿監督作品集 | ¥45,980 円 定価より2,420円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0020313178) |
+| 335 | ウルトラマンメビウス コンプリート・ブルーレイBOX(Blu-ray Disc) | ¥41,800 円 定価より2,200円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0020685216) |
+| 336 | 無敵鋼人ダイターン3 Blu-ray BOX(Blu-ray Disc) | ¥41,800 円 定価より2,200円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0019306715) |
+| 337 | ガンバの冒険 Blu-ray BOX(Blu-ray Disc) | ¥41,591 円 定価より2,189円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0017207768) |
+| 405 | 『ウルトラマン80』ブルーレイBOX(Blu-ray Disc) | ¥39,710 円 定価より2,090円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0020361792) |
+| 434 | クールディバイシスシリーズ コンプリート | ¥38,500 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0001233663) |
+| 451 | TMA 妃悠愛 COMPLETE BOX 30枚組 完全保存版 | ¥38,500 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016737479) |
+| 477 | 白い巨塔 DVD-BOX | ¥37,620 円 定価より1,980円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0020613736) |
+| 478 | ジブリがいっぱい 監督もいっぱい コレクション | ¥36,575 円 定価より1,925円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0019754674) |
+| 479 | ダウントン・アビー アルティメット・レガシー・コレクション(Blu-ray Disc) | ¥36,575 円 定価より1,925円（5%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/new/0020816347) |
+| 496 | 新キッズ・ウォー DVD-BOX | ¥35,200 円 | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0011147008) |
+| 559 | 銀河英雄伝説 BOX 全46巻セット(通販限定版) | ¥35,200 円 定価より206,800円（85%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0017264965) |
+| 569 | スター・ウォーズ スカイウォーカー・サーガ 4K UHD コンプリートBOX(数量限定)(4K ULTRA HD+Blu-ray Disc) | ¥35,200 円 定価より19,800円（36%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0019433201) |
+| 634 | Bible Black コンプリートBOX〈限定3000セット〉 | ¥33,000 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016737146) |
+| 635 | 宇宙戦艦ヤマトTV BD-BOX 豪華版(Blu-ray Disc) | ¥33,000 円 定価より11,000円（25%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016795408) |
+| 675 | リヨン伝説フレア GUY COMPLETE BOX | ¥30,800 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015143539) |
+| 712 | 校内写生2 | ¥30,800 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0001227488) |
+| 714 | 同級生 1 | ¥30,800 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0001243498) |
+| 734 | KUKIピンクファイル 大石あやか | ¥30,800 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015690278) |
+| 745 | 第3回 顔出し素人娘(うぶっこ)の赤面手コキ研究所 | ¥30,800 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016680859) |
+| 748 | NEW TYPE 藍色しあん/MUTEKI | ¥30,800 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016822919) |
+| 752 | 電撃引退!!風俗ちゃんねる35 土屋リン | ¥30,800 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0017129159) |
+| 782 | 赤い疑惑 | ¥29,700 円 定価より7,260円（19%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0010018342) |
+| 791 | 顔出し素人娘(うぶっこ)ギリギリモザイクフェラでザーメンお口で受け止めて ファイナル | ¥29,700 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016473507) |
+| 822 | 宇宙企画Classic 中原美佑Ⅱ | ¥29,700 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015143453) |
+| 823 | 太陽にほえろ！ 1978 DVD-BOXI | ¥29,700 円 定価より12,760円（30%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015318190) |
+| 825 | ミッシェル・ガン・エレファント"THEE MOVIE"-LAST HEAVEN 031011-(Blu-ray Disc) | ¥29,700 円 | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016292371) |
+| 840 | FISH TANKer's ONLY 2008(FC限定/限定盤) | ¥29,700 円 | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0018854893) |
+| 879 | 太陽にほえろ！ 1978 DVD-BOXⅡ | ¥28,600 円 定価より13,860円（32%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015610757) |
+| 891 | BLACK LAGOON Blu-ray BOX(Blu-ray Disc) | ¥28,600 円 定価より26,400円（48%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016994983) |
+| 909 | 髑髏城の七人 花鳥風月極 Blu-ray BOX(Blu-ray Disc) | ¥28,600 円 定価より26,400円（48%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0020245006) |
+| 937 | ATHENA CENTURYⅢ 性感Xテクニック | ¥28,600 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015150512) |
+| 938 | 柔道一直線 DVD-BOX2 | ¥28,600 円 定価より4,400円（13%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015205236) |
+| 1038 | スペシャルパッケージ 痴漢20人隊VOLUME1・2・3 | ¥27,500 円 | 確認保留 [age_verification]: 年齢確認ページのため対象商品の店舗情報を照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0015146272) |
+| 1055 | アマガミSS Blu-ray BOX“バレンタインパック"(Blu-ray Disc) | ¥27,500 円 定価より2,530円（8%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0017062574) |
+| 1133 | 谷村新司 60 One and only DVD BOX(7枚組) | ¥26,400 円 定価より13,409円（33%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0018997848) |
+| 1140 | グレート・ムタ 引退記念Blu-ray BOX:GREAT MUTA FINAL "BYE-BYE"(Blu-ray Disc) | ¥26,400 円 定価より13,200円（33%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0019891380) |
+| 1177 | 蒼穹のファフナー EXODUS Blu-ray BOX(初回限定版)(Blu-ray Disc) | ¥26,400 円 定価より15,400円（36%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0018960839) |
+| 1189 | THE IDOLM@STER SHINY COLORS “283PRODUCTION SOLO PERFORMANCE LIVE「我儘なまま」&5.5th Anniversary LIVE「星が見上げた空」" Blu-ray BOX(初回生産限定版)(Blu-ray Disc) | ¥26,400 円 定価より12,100円（31%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0020171955) |
+| 1205 | 太陽にほえろ！ テキサス刑事編Ⅱ DVD-BOX | ¥25,300 円 定価より18,260円（41%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0001463648) |
+| 1221 | 太陽にほえろ！ 1980 DVD-BOX Ⅱ | ¥25,300 円 定価より14,960円（37%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016186876) |
+| 1241 | テイルズ オブ ゼスティリア ザ クロス Blu-ray BOX Ⅱ(公式サイト限定)(特装限定版)(Blu-ray Disc) | ¥25,300 円 定価より14,300円（36%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0018883487) |
+| 1242 | コッキーポップ TV(DVD全8巻) | ¥25,300 円 定価より18,480円（42%）おトク | 確認保留 [identity_mismatch]: 商品ID・商品名・JANの二重照合を完了できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0019340267) |
+| 1274 | 瀬戸の花嫁 BOX(Blu-ray Disc) | ¥25,300 円 定価より29,480円（53%）おトク | 確認保留 [modal_invalid]: 店舗情報欄の店舗数と店舗一覧を安全に照合できません | [詳細ページ](https://shopping.bookoff.co.jp/used/0016259871) |
