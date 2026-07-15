@@ -276,7 +276,7 @@ def json_for_html(value):
     )
 
 
-def pref_options_html(prefectures, selected="神奈川県"):
+def pref_options_html(prefectures, selected=""):
     """Build trusted static options with normal HTML escaping."""
     options = ['<option value="">全国</option>']
     for prefecture in prefectures:
@@ -297,7 +297,7 @@ HTML_TEMPLATE = """<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <link rel="icon" href="data:,">
-  <title>店舗別高額ソフト在庫チェッカー</title>
+  <title>高額ソフト公式掲載チェッカー</title>
   <style>
     :root {
       --bg: #0b0e14;
@@ -802,14 +802,14 @@ HTML_TEMPLATE = """<!doctype html>
       prefectureField.hidden = !storeMode;
       prefectureSelect.disabled = !storeMode;
       if (storeMode) {
-        searchLabel.textContent = "商品名・店舗名で検索";
-        searchInput.placeholder = "商品名または店舗名";
+        searchLabel.textContent = "商品名・掲載店舗名で検索";
+        searchInput.placeholder = "商品名または掲載店舗名";
       } else if (mode === "pending") {
         searchLabel.textContent = "商品名・理由で検索";
         searchInput.placeholder = "商品名または確認理由";
       } else {
-        searchLabel.textContent = "商品名・店舗名・理由で検索";
-        searchInput.placeholder = "商品名、店舗名、または確認理由";
+        searchLabel.textContent = "商品名・掲載店舗名・理由で検索";
+        searchInput.placeholder = "商品名、掲載店舗名、または確認理由";
       }
       results.setAttribute("aria-label", tabs.find((tab) => tab.dataset.mode === mode).textContent);
       render();
