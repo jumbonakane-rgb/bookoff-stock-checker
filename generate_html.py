@@ -1,6 +1,7 @@
 import re
 import os
 import json
+import tempfile
 
 # 都道府県の標準的な並び順
 PREFECTURES_ORDER = [
@@ -55,10 +56,17 @@ def main():
         
         title = title.replace('\\|', '|')
         
-        stores = []
-        if "在庫なし" in stock_str or "入荷店舗: 0店" in stock_str:
-            pass
+        if stock_str.startswith("入荷店舗:"):
+            stock_status = "available"
+        elif "確認保留" in stock_str:
+            stock_status = "unverified"
+        elif "取得失敗" in stock_str:
+            stock_status = "fetch_error"
         else:
+            stock_status = "no_stock"
+
+        stores = []
+        if stock_status == "available":
             parts = stock_str.split("<br>")
             for part in parts:
                 part = part.strip()
@@ -76,6 +84,7 @@ def main():
                     
                     if matched_pref:
                         store_name = part.replace(f" ({m.group(1)})", "").strip()
+                        store_name = store_name.replace("ブックオフ", "").replace("BOOKOFF", "").replace("BOOK OFF", "").strip()
                         store_name = re.sub(r'\s+', ' ', store_name)
                         stores.append({
                             "store_name": store_name,
@@ -100,10 +109,12 @@ def main():
             "price_str": price_str,
             "price_val": price_val,
             "detail_url": link,
+            "stock_status": stock_status,
             "stores": stores
         })
         
     print(f"Successfully parsed {len(products)} products.")
+    pending_count = sum(p["stock_status"] == "unverified" for p in products)
     
     # 日本の標準的な都道府県順（北海道〜沖縄）をそのまま使用する
     sorted_prefs = PREFECTURES_ORDER
@@ -182,7 +193,7 @@ def main():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ブックオフ店舗別高額ソフト在庫チェッカー</title>
+    <title>店舗別高額ソフト在庫チェッカー</title>
     <!-- Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -498,9 +509,9 @@ def main():
 <body>
     <div class="container">
         <header>
-            <p class="subtitle">BOOKOFF ONLINE SCRAPER</p>
+            <p class="subtitle">ONLINE SCRAPER</p>
             <h1>高額アニメソフト店舗別チェッカー</h1>
-            <p class="subtitle" style="font-size: 0.8rem; margin-top: 4px;">価格: 25,000円以上 | 最終更新: {time_str_placeholder()}</p>
+            <p class="subtitle" style="font-size: 0.8rem; margin-top: 4px;">価格: 25,000円以上 | 最終更新: {time_str_placeholder()} | 照合保留: {pending_count}件</p>
         </header>
 
         <!-- Filters Section -->
@@ -683,8 +694,23 @@ def main():
 </html>
 """
     
-    with open(html_path, "w", encoding="utf-8") as f:
-        f.write(html_template)
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=os.path.dirname(html_path),
+            prefix=".index.html.",
+            suffix=".tmp",
+            delete=False,
+        ) as temp_file:
+            temp_file.write(html_template)
+            temp_path = temp_file.name
+        os.chmod(temp_path, 0o644)
+        os.replace(temp_path, html_path)
+    finally:
+        if temp_path and os.path.exists(temp_path):
+            os.unlink(temp_path)
         
     print(f"Interactive HTML successfully generated at: {html_path}")
 

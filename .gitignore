@@ -5,6 +5,7 @@ __pycache__/
 *.log
 detail_sample.html
 test_*.py
+!test_scraper_robust.py
 parse_*.py
 scraper_fast.py
 scraper.py

@@ -51,7 +51,7 @@ def main():
         data_lines_count += 1
         
         # 在庫状況を解析
-        if "在庫なし" in stock_str or "入荷店舗: 0店" in stock_str:
+        if not stock_str.startswith("入荷店舗:"):
             continue
             
         # <br> で店舗ごとに分割
@@ -100,7 +100,7 @@ def main():
                 store_clean = part
                 if store_clean not in by_pref["その他・不明"]:
                     by_pref["その他・不明"][store_clean] = []
-                by_pref["other"][store_clean].append({
+                by_pref["その他・不明"][store_clean].append({
                     "no": no,
                     "title": title,
                     "price": price,
@@ -113,7 +113,7 @@ def main():
     print(f"Writing sorted by prefecture and store to: {output_path}")
     
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write("# ブックオフオンライン アニメDVD・Blu-ray 都道府県別・店舗別在庫リスト（25,000円以上）\n\n")
+        f.write("# アニメDVD・Blu-ray 都道府県別・店舗別在庫リスト（25,000円以上）\n\n")
         f.write("元の高額商品リストから、在庫が存在する都道府県・店舗ごとに再構成したリストです。（各都道府県内では店舗ごとの在庫数が多い順に並んでいます）\n\n")
         
         # クイックリンク（目次）
