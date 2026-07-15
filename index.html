@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <link rel="icon" href="data:,">
-  <title>店舗別高額ソフト在庫チェッカー</title>
+  <title>高額ソフト公式掲載チェッカー</title>
   <style>
     :root {
       --bg: #0b0e14;
@@ -252,7 +252,7 @@
     <header class="app-header">
       <div class="eyebrow">BOOKOFF STOCK</div>
       <h1>高額ソフト公式掲載チェッカー</h1>
-      <p class="updated">最終更新: 2026-07-16 02:20:46 / 全 1321 商品 / 確認保留 44 件 / 取得失敗 0 件</p>
+      <p class="updated">最終更新: 2026-07-16 02:24:40 / 全 1321 商品 / 確認保留 44 件 / 取得失敗 0 件</p>
     </header>
 
     <main>
@@ -283,7 +283,7 @@
 <option value="埼玉県">埼玉県</option>
 <option value="千葉県">千葉県</option>
 <option value="東京都">東京都</option>
-<option value="神奈川県" selected>神奈川県</option>
+<option value="神奈川県">神奈川県</option>
 <option value="新潟県">新潟県</option>
 <option value="富山県">富山県</option>
 <option value="石川県">石川県</option>
@@ -557,14 +557,14 @@
       prefectureField.hidden = !storeMode;
       prefectureSelect.disabled = !storeMode;
       if (storeMode) {
-        searchLabel.textContent = "商品名・店舗名で検索";
-        searchInput.placeholder = "商品名または店舗名";
+        searchLabel.textContent = "商品名・掲載店舗名で検索";
+        searchInput.placeholder = "商品名または掲載店舗名";
       } else if (mode === "pending") {
         searchLabel.textContent = "商品名・理由で検索";
         searchInput.placeholder = "商品名または確認理由";
       } else {
-        searchLabel.textContent = "商品名・店舗名・理由で検索";
-        searchInput.placeholder = "商品名、店舗名、または確認理由";
+        searchLabel.textContent = "商品名・掲載店舗名・理由で検索";
+        searchInput.placeholder = "商品名、掲載店舗名、または確認理由";
       }
       results.setAttribute("aria-label", tabs.find((tab) => tab.dataset.mode === mode).textContent);
       render();
