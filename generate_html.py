@@ -583,10 +583,10 @@ HTML_TEMPLATE = """<!doctype html>
     const statusLabels = {
       available: "入荷店舗あり",
       no_stock: "在庫なし",
-      age_verification: "確認保留 [age_verification]",
-      identity_mismatch: "確認保留 [identity_mismatch]",
-      modal_invalid: "確認保留 [modal_invalid]",
-      fetch_error: "取得失敗 [fetch_error]"
+      age_verification: "年齢確認のため保留",
+      identity_mismatch: "商品照合を保留",
+      modal_invalid: "店舗情報の照合を保留",
+      fetch_error: "取得失敗"
     };
 
     const searchInput = document.getElementById("search-input");
@@ -664,7 +664,9 @@ HTML_TEMPLATE = """<!doctype html>
       card.appendChild(head);
 
       const body = element("div", "product-card-body");
-      body.appendChild(element("p", "status-line", statusLine(product)));
+      if (product.stock_status === "available" || product.stock_status === "no_stock") {
+        body.appendChild(element("p", "status-line", statusLine(product)));
+      }
       if (product.status_reason) {
         const reasonClass = product.stock_status === "fetch_error" ? "reason error" : "reason";
         body.appendChild(element("p", reasonClass, product.status_reason));

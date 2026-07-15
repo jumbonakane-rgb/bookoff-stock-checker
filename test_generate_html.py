@@ -202,6 +202,8 @@ class BuildHtmlTests(unittest.TestCase):
         self.assertIn('data-mode="stores"', document)
         self.assertIn('data-mode="pending"', document)
         self.assertIn('data-mode="all"', document)
+        self.assertIn('age_verification: "年齢確認のため保留"', document)
+        self.assertIn('modal_invalid: "店舗情報の照合を保留"', document)
 
     def test_atomic_writer_replaces_target(self):
         with tempfile.TemporaryDirectory() as temp_dir:
