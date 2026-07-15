@@ -296,6 +296,7 @@ HTML_TEMPLATE = """<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:,">
   <title>店舗別高額ソフト在庫チェッカー</title>
   <style>
     :root {

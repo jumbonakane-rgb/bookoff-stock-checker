@@ -198,6 +198,7 @@ class BuildHtmlTests(unittest.TestCase):
         self.assertNotIn("innerHTML", document)
         self.assertIn('name="viewport" content="width=device-width, initial-scale=1"', document)
         self.assertNotIn("user-scalable=no", document)
+        self.assertIn('<link rel="icon" href="data:,">', document)
         self.assertIn('data-mode="stores"', document)
         self.assertIn('data-mode="pending"', document)
         self.assertIn('data-mode="all"', document)
