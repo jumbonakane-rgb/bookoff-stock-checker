@@ -6,6 +6,10 @@ __pycache__/
 detail_sample.html
 test_*.py
 !test_scraper_robust.py
+!test_auto_update_checker.py
+!test_markdown_table.py
+!test_generate_html.py
 parse_*.py
 scraper_fast.py
 scraper.py
+last_update.txt

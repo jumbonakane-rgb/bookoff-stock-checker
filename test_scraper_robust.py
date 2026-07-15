@@ -94,6 +94,47 @@ class StoreStockParsingTests(unittest.TestCase):
         self.assertEqual(result["stock_status"], scraper.STATUS_AGE_VERIFICATION)
         self.assertEqual(result["stores"], [])
 
+    def test_age_gate_is_detected_without_redirect_script(self):
+        html = '<a href="/age-verification?return=/used/0012345678">年齢確認</a>'
+
+        result = scraper.parse_store_stock_html(html, PRODUCT_URL, PRODUCT_TITLE)
+
+        self.assertEqual(result["stock_status"], scraper.STATUS_AGE_VERIFICATION)
+
+    def test_matching_dummy_sapporo_modal_with_root_link_is_rejected(self):
+        dummy = modal_html(
+            PRODUCT_TITLE,
+            1,
+            [("札幌南2条店", "北海道札幌市中央区", "/")],
+        )
+
+        result = scraper.parse_store_stock_html(
+            product_html(dummy),
+            PRODUCT_URL,
+            PRODUCT_TITLE,
+        )
+
+        self.assertEqual(result["stock_status"], scraper.STATUS_MODAL_INVALID)
+        self.assertEqual(result["stores"], [])
+
+    def test_duplicate_store_rows_are_rejected_even_when_count_matches(self):
+        duplicate = modal_html(
+            PRODUCT_TITLE,
+            2,
+            [
+                ("大阪心斎橋店", "大阪府大阪市", "https://www.bookoff.co.jp/shop/shop20345.html"),
+                ("大阪心斎橋店", "大阪府大阪市", "https://www.bookoff.co.jp/shop/shop20345.html"),
+            ],
+        )
+
+        result = scraper.parse_store_stock_html(
+            product_html(duplicate),
+            PRODUCT_URL,
+            PRODUCT_TITLE,
+        )
+
+        self.assertEqual(result["stock_status"], scraper.STATUS_MODAL_INVALID)
+
     def test_jan_mismatch_is_not_treated_as_no_stock(self):
         zero_store_modal = modal_html(PRODUCT_TITLE, 0, [])
         result = scraper.parse_store_stock_html(
@@ -134,23 +175,44 @@ class StoreStockParsingTests(unittest.TestCase):
 class SearchAndOutputSafetyTests(unittest.TestCase):
     def test_search_parser_extracts_only_high_value_product_cards(self):
         html = """
+        <p class="productSearch__num">1件～1件（全1件）</p>
         <div class="productItem js-hoverItem">
           <a href="/used/0012345678"></a>
           <p class="productItem__title">高額商品</p>
           <p class="productItem__price">&yen;27,500円</p>
         </div>
+        """
+
+        parsed = scraper.parse_search_products(html)
+
+        self.assertEqual(parsed["raw_item_count"], 1)
+        self.assertEqual(parsed["total_count"], 1)
+        self.assertEqual(parsed["parse_errors"], [])
+        self.assertEqual(parsed["products"][0]["detail_url"], PRODUCT_URL)
+
+    def test_search_parser_rejects_an_unparseable_card(self):
+        html = """
+        <p class="productSearch__num">1件～1件（全1件）</p>
         <div class="productItem js-hoverItem">
-          <a href="/used/0099999999"></a>
-          <p class="productItem__title">対象外商品</p>
-          <p class="productItem__price">&yen;24,999円</p>
+          <p class="productItem__title">URLなし商品</p>
+          <p class="productItem__price">&yen;27,500円</p>
         </div>
         """
 
-        products, raw_count = scraper.parse_search_products(html)
+        parsed = scraper.parse_search_products(html)
 
-        self.assertEqual(raw_count, 2)
-        self.assertEqual(len(products), 1)
-        self.assertEqual(products[0]["detail_url"], PRODUCT_URL)
+        self.assertEqual(parsed["raw_item_count"], 1)
+        self.assertEqual(parsed["products"], [])
+        self.assertTrue(parsed["parse_errors"])
+
+    def test_search_parser_requires_explicit_empty_message(self):
+        blank = scraper.parse_search_products("<html><body></body></html>")
+        explicit = scraper.parse_search_products(
+            f"<p>{scraper.SEARCH_EMPTY_MESSAGE}</p>"
+        )
+
+        self.assertFalse(blank["confirmed_empty"])
+        self.assertTrue(explicit["confirmed_empty"])
 
     def test_collection_guard_detects_a_collapsed_price_range(self):
         products = [
@@ -170,8 +232,11 @@ class SearchAndOutputSafetyTests(unittest.TestCase):
         product = {
             "stock_status": scraper.STATUS_AGE_VERIFICATION,
             "stores": [],
+            "status_reason": "年齢確認ページです",
         }
         self.assertIn("確認保留", scraper.stock_cell_text(product))
+        self.assertIn("age_verification", scraper.stock_cell_text(product))
+        self.assertIn("年齢確認ページです", scraper.stock_cell_text(product))
         self.assertNotIn("在庫なし", scraper.stock_cell_text(product))
 
 
