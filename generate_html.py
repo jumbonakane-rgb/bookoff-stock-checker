@@ -543,21 +543,21 @@ HTML_TEMPLATE = """<!doctype html>
   <div class="shell">
     <header class="app-header">
       <div class="eyebrow">BOOKOFF STOCK</div>
-      <h1>高額ソフト在庫チェッカー</h1>
+      <h1>高額ソフト公式掲載チェッカー</h1>
       <p class="updated">最終更新: __GENERATED_AT__ / 全 __TOTAL_COUNT__ 商品 / 確認保留 __PENDING_COUNT__ 件 / 取得失敗 __FETCH_ERROR_COUNT__ 件</p>
     </header>
 
     <main>
       <nav class="tabs" role="tablist" aria-label="表示モード">
-        <button class="tab" type="button" role="tab" data-mode="stores" aria-selected="true">店舗在庫</button>
+        <button class="tab" type="button" role="tab" data-mode="stores" aria-selected="true">公式掲載店舗</button>
         <button class="tab" type="button" role="tab" data-mode="pending" aria-selected="false">確認保留</button>
         <button class="tab" type="button" role="tab" data-mode="all" aria-selected="false">全商品</button>
       </nav>
 
       <section class="filters" aria-label="絞り込み">
         <div class="field">
-          <label for="search-input" id="search-label">商品名・店舗名で検索</label>
-          <input id="search-input" type="search" autocomplete="off" placeholder="商品名または店舗名">
+          <label for="search-input" id="search-label">商品名・掲載店舗名で検索</label>
+          <input id="search-input" type="search" autocomplete="off" placeholder="商品名または掲載店舗名">
         </div>
         <div class="field" id="prefecture-field">
           <label for="prefecture-select">都道府県</label>
@@ -569,7 +569,7 @@ HTML_TEMPLATE = """<!doctype html>
       <section class="results" id="results" role="tabpanel" aria-live="polite"></section>
 
       <noscript>
-        <div class="no-js">JavaScriptを有効にすると、全 __TOTAL_COUNT__ 商品の店舗在庫・確認保留・在庫なしを検索できます。</div>
+        <div class="no-js">JavaScriptを有効にすると、全 __TOTAL_COUNT__ 商品の公式掲載店舗・確認保留・掲載0店を検索できます。</div>
       </noscript>
     </main>
   </div>
@@ -581,8 +581,8 @@ HTML_TEMPLATE = """<!doctype html>
     const products = JSON.parse(document.getElementById("product-data").textContent);
     const pendingStatuses = new Set(["age_verification", "identity_mismatch", "modal_invalid", "fetch_error"]);
     const statusLabels = {
-      available: "入荷店舗あり",
-      no_stock: "在庫なし",
+      available: "公式掲載あり",
+      no_stock: "公式掲載0店",
       age_verification: "年齢確認のため保留",
       identity_mismatch: "商品照合を保留",
       modal_invalid: "店舗情報の照合を保留",
@@ -648,10 +648,10 @@ HTML_TEMPLATE = """<!doctype html>
 
     function statusLine(product) {
       if (product.stock_status === "available") {
-        return "入荷店舗: " + product.stores.length + "店";
+        return "公式ページ掲載: " + product.stores.length + "店";
       }
       if (product.stock_status === "no_stock") {
-        return "在庫なし (入荷店舗: 0店)";
+        return "公式ページ掲載: 0店";
       }
       return statusLabels[product.stock_status] || product.stock_status;
     }
@@ -737,8 +737,8 @@ HTML_TEMPLATE = """<!doctype html>
       });
 
       if (!stores.length) {
-        resultSummary.textContent = "該当店舗: 0店";
-        emptyState("条件に一致する店舗在庫はありません。");
+        resultSummary.textContent = "該当掲載店舗: 0店";
+        emptyState("条件に一致する公式掲載店舗はありません。");
         return;
       }
 
@@ -749,7 +749,7 @@ HTML_TEMPLATE = """<!doctype html>
         const head = element("div", "card-head");
         const heading = element("h2", "card-title", store.store_name);
         head.appendChild(heading);
-        const label = store.prefecture + " / 在庫 " + store.products.length + "点";
+        const label = store.prefecture + " / 公式掲載 " + store.products.length + "点";
         head.appendChild(element("span", "badge available", label));
         card.appendChild(head);
         const rows = element("div", "rows");
@@ -760,7 +760,7 @@ HTML_TEMPLATE = """<!doctype html>
         card.appendChild(rows);
         fragment.appendChild(card);
       }
-      resultSummary.textContent = "該当店舗: " + stores.length + "店 / 商品: " + visibleProductUrls.size + "件";
+      resultSummary.textContent = "該当掲載店舗: " + stores.length + "店 / 商品: " + visibleProductUrls.size + "件";
       results.replaceChildren(fragment);
     }
 

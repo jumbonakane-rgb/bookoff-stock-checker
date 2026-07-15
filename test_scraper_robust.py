@@ -1,5 +1,6 @@
 import unittest
 from collections import Counter
+from unittest.mock import patch
 
 import scraper_robust as scraper
 
@@ -170,6 +171,80 @@ class StoreStockParsingTests(unittest.TestCase):
 
         self.assertEqual(result["stock_status"], scraper.STATUS_NO_STOCK)
         self.assertEqual(result["stores"], [])
+
+    def test_age_verification_form_is_validated(self):
+        html = """
+        <form id="ageVerificationForm" method="post"
+              action="https://shopping.bookoff.co.jp/age-verification">
+          <input type="hidden" name="ageVerification" value="ok">
+          <input type="hidden" name="backUrl" value="">
+        </form>
+        """
+
+        action, form_data = scraper.parse_age_verification_form(html)
+
+        self.assertEqual(action, scraper.AGE_VERIFICATION_URL)
+        self.assertEqual(form_data, {"ageVerification": "ok", "backUrl": ""})
+
+    def test_untrusted_age_verification_form_is_rejected(self):
+        html = """
+        <form id="ageVerificationForm" method="post" action="https://example.com/">
+          <input type="hidden" name="ageVerification" value="ok">
+        </form>
+        """
+
+        with self.assertRaisesRegex(ValueError, "送信先"):
+            scraper.parse_age_verification_form(html)
+
+    def test_fetch_rechecks_product_after_age_verification(self):
+        age_html = "<script>location.href='/age-verification';</script>"
+        gate_html = """
+        <form id="ageVerificationForm" method="post"
+              action="https://shopping.bookoff.co.jp/age-verification">
+          <input type="hidden" name="ageVerification" value="ok">
+          <input type="hidden" name="backUrl" value="">
+        </form>
+        """
+        verified_html = product_html(modal_html(PRODUCT_TITLE, 0, []))
+
+        class FakeResponse:
+            def __init__(self, text, status_code=200):
+                self.text = text
+                self.status_code = status_code
+
+        class FakeSession:
+            def __init__(self):
+                self.headers = {}
+                self.detail_requests = 0
+                self.posted = []
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def get(self, url, timeout):
+                if url == scraper.AGE_VERIFICATION_URL:
+                    return FakeResponse(gate_html)
+                self.detail_requests += 1
+                return FakeResponse(age_html if self.detail_requests == 1 else verified_html)
+
+            def post(self, url, data, timeout):
+                self.posted.append((url, data))
+                return FakeResponse("ok")
+
+        fake_session = FakeSession()
+        with (
+            patch.object(scraper.requests, "Session", return_value=fake_session),
+            patch.object(scraper.time, "sleep"),
+            patch.object(scraper.random, "uniform", return_value=0),
+        ):
+            result = scraper.fetch_store_stock(PRODUCT_URL, PRODUCT_TITLE, max_retries=1)
+
+        self.assertEqual(result["stock_status"], scraper.STATUS_NO_STOCK)
+        self.assertEqual(fake_session.detail_requests, 2)
+        self.assertEqual(fake_session.posted[0][0], scraper.AGE_VERIFICATION_URL)
 
 
 class SearchAndOutputSafetyTests(unittest.TestCase):

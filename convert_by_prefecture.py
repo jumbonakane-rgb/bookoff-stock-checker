@@ -130,8 +130,8 @@ def main():
     # 新しいMarkdownファイルを書き出す
     print(f"Writing sorted by prefecture and store to: {output_path}")
     f = StringIO()
-    f.write("# アニメDVD・Blu-ray 都道府県別・店舗別在庫リスト（25,000円以上）\n\n")
-    f.write("元の高額商品リストから、在庫が存在する都道府県・店舗ごとに再構成したリストです。（各都道府県内では店舗ごとの在庫数が多い順に並んでいます）\n\n")
+    f.write("# アニメDVD・Blu-ray 都道府県別・公式掲載店舗リスト（25,000円以上）\n\n")
+    f.write("元の高額商品リストから、BOOKOFF公式ページに掲載された店舗ごとに再構成したリストです。（各都道府県内では掲載商品数が多い順に並んでいます）\n\n")
 
     # クイックリンク（目次）
     f.write("### 都道府県クイックリンク\n")

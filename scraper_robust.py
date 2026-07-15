@@ -9,6 +9,7 @@ import unicodedata
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
+from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
@@ -17,6 +18,7 @@ from markdown_table import escape_markdown_cell, split_markdown_row
 
 # ブックオフオンラインのベースURL
 BASE_URL = "https://shopping.bookoff.co.jp"
+AGE_VERIFICATION_URL = f"{BASE_URL}/age-verification"
 # DVD・ブルーレイ全体、ソートなし、120件表示、価格帯指定の検索URL
 SEARCH_URL_TEMPLATE = "https://shopping.bookoff.co.jp/search/genre/71?per-page=120&p={page}&price={price_range}"
 
@@ -121,6 +123,38 @@ def stock_result(status, stores=None, reason="", jan=""):
         "status_reason": reason,
         "jan": jan,
     }
+
+
+def parse_age_verification_form(html):
+    """Validate and extract the official Bookoff age-confirmation form."""
+    soup = BeautifulSoup(html, "html.parser")
+    form = soup.select_one("form#ageVerificationForm")
+    if not form:
+        raise ValueError("年齢確認フォームが見つかりません")
+
+    method = str(form.get("method") or "").strip().lower()
+    action = urljoin(BASE_URL, str(form.get("action") or "").strip())
+    if method != "post" or action != AGE_VERIFICATION_URL:
+        raise ValueError("年齢確認フォームの送信先を検証できません")
+
+    form_data = {}
+    for field in form.select('input[type="hidden"][name]'):
+        form_data[str(field.get("name"))] = str(field.get("value") or "")
+    if form_data.get("ageVerification") != "ok":
+        raise ValueError("年齢確認フォームの確認値を検証できません")
+    return action, form_data
+
+
+def complete_age_verification(session):
+    """Confirm the official age gate inside the same HTTP session."""
+    gate_response = session.get(AGE_VERIFICATION_URL, timeout=20)
+    if gate_response.status_code != 200:
+        raise RuntimeError(f"年齢確認ページのHTTP状態: {gate_response.status_code}")
+
+    action, form_data = parse_age_verification_form(gate_response.text)
+    post_response = session.post(action, data=form_data, timeout=20)
+    if post_response.status_code != 200:
+        raise RuntimeError(f"年齢確認送信後のHTTP状態: {post_response.status_code}")
 
 
 def parse_store_stock_html(html, detail_url, expected_title):
@@ -259,46 +293,69 @@ def fetch_store_stock(detail_url, expected_title, max_retries=4):
 
     last_parsed_result = None
     last_error = ""
-    for attempt in range(1, max_retries + 1):
-        try:
-            time.sleep(random.uniform(0.3, 1.0))
-            response = requests.get(detail_url, headers=HEADERS, timeout=20)
+    age_verification_completed = False
+    with requests.Session() as session:
+        session.headers.update(HEADERS)
+        for attempt in range(1, max_retries + 1):
+            try:
+                time.sleep(random.uniform(0.3, 1.0))
+                response = session.get(detail_url, timeout=20)
 
-            if response.status_code == 200:
-                parsed = parse_store_stock_html(response.text, detail_url, expected_title)
-                if parsed["stock_status"] in {
-                    STATUS_AVAILABLE,
-                    STATUS_NO_STOCK,
-                    STATUS_AGE_VERIFICATION,
-                }:
-                    return parsed
+                if response.status_code == 200:
+                    parsed = parse_store_stock_html(response.text, detail_url, expected_title)
 
-                last_parsed_result = parsed
-                if attempt < max_retries:
-                    wait_time = attempt * 2.0
-                    print(
-                        f"  [Retry Warning] Validation failed for {detail_url}: "
-                        f"{parsed['status_reason']}. Attempt {attempt}/{max_retries}. "
-                        f"Sleeping {wait_time}s..."
-                    )
-                    time.sleep(wait_time)
-                continue
+                    if (
+                        parsed["stock_status"] == STATUS_AGE_VERIFICATION
+                        and not age_verification_completed
+                    ):
+                        complete_age_verification(session)
+                        age_verification_completed = True
+                        response = session.get(detail_url, timeout=20)
+                        if response.status_code == 200:
+                            parsed = parse_store_stock_html(
+                                response.text,
+                                detail_url,
+                                expected_title,
+                            )
+                        else:
+                            last_error = f"年齢確認後 HTTP {response.status_code}"
+                            parsed = stock_result(
+                                STATUS_FETCH_ERROR,
+                                reason=last_error,
+                            )
 
-            last_error = f"HTTP {response.status_code}"
-            wait_time = attempt * (4.0 if response.status_code in [429, 503] else 2.0)
-            print(
-                f"  [Retry Warning] Status {response.status_code} for {detail_url}. "
-                f"Attempt {attempt}/{max_retries}. Sleeping {wait_time}s..."
-            )
-            time.sleep(wait_time)
-        except Exception as exc:
-            last_error = str(exc)
-            wait_time = attempt * 3.0
-            print(
-                f"  [Retry Warning] Connection Error ({exc}) for {detail_url}. "
-                f"Attempt {attempt}/{max_retries}. Retrying in {wait_time}s..."
-            )
-            time.sleep(wait_time)
+                    if parsed["stock_status"] in {
+                        STATUS_AVAILABLE,
+                        STATUS_NO_STOCK,
+                    }:
+                        return parsed
+
+                    last_parsed_result = parsed
+                    if attempt < max_retries:
+                        wait_time = attempt * 2.0
+                        print(
+                            f"  [Retry Warning] Validation failed for {detail_url}: "
+                            f"{parsed['status_reason']}. Attempt {attempt}/{max_retries}. "
+                            f"Sleeping {wait_time}s..."
+                        )
+                        time.sleep(wait_time)
+                    continue
+
+                last_error = f"HTTP {response.status_code}"
+                wait_time = attempt * (4.0 if response.status_code in [429, 503] else 2.0)
+                print(
+                    f"  [Retry Warning] Status {response.status_code} for {detail_url}. "
+                    f"Attempt {attempt}/{max_retries}. Sleeping {wait_time}s..."
+                )
+                time.sleep(wait_time)
+            except Exception as exc:
+                last_error = str(exc)
+                wait_time = attempt * 3.0
+                print(
+                    f"  [Retry Warning] Connection Error ({exc}) for {detail_url}. "
+                    f"Attempt {attempt}/{max_retries}. Retrying in {wait_time}s..."
+                )
+                time.sleep(wait_time)
 
     if last_parsed_result:
         return last_parsed_result
