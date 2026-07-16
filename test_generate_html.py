@@ -209,7 +209,9 @@ class BuildHtmlTests(unittest.TestCase):
         self.assertIn('return "公式ページ掲載: 0店"', document)
         self.assertNotIn('no_stock: "在庫なし"', document)
         self.assertIn('<option value="">全国</option>', document)
-        self.assertNotIn('<option value="神奈川県" selected>', document)
+        self.assertIn('<option value="神奈川県" selected>', document)
+        self.assertIn("if (!selectedPrefecture)", document)
+        self.assertIn("aPrefectureOrder - bPrefectureOrder", document)
 
     def test_atomic_writer_replaces_target(self):
         with tempfile.TemporaryDirectory() as temp_dir:

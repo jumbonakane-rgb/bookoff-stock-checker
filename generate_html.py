@@ -32,6 +32,7 @@ PREFECTURES_ORDER = [
     "徳島県", "香川県", "愛媛県", "高知県", "福岡県", "佐賀県", "長崎県",
     "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県",
 ]
+DEFAULT_PREFECTURE = "神奈川県"
 
 UNVERIFIED_STATUSES = {
     "age_verification",
@@ -593,6 +594,11 @@ HTML_TEMPLATE = """<!doctype html>
     const searchLabel = document.getElementById("search-label");
     const prefectureField = document.getElementById("prefecture-field");
     const prefectureSelect = document.getElementById("prefecture-select");
+    const prefectureOrder = new Map(
+      Array.from(prefectureSelect.options)
+        .filter((option) => option.value)
+        .map((option, index) => [option.value, index])
+    );
     const results = document.getElementById("results");
     const resultSummary = document.getElementById("result-summary");
     const tabs = Array.from(document.querySelectorAll("[data-mode]"));
@@ -730,6 +736,13 @@ HTML_TEMPLATE = """<!doctype html>
         store.products.sort((a, b) => b.price_val - a.price_val || a.no - b.no);
       }
       stores.sort((a, b) => {
+        if (!selectedPrefecture) {
+          const aPrefectureOrder = prefectureOrder.get(a.prefecture) ?? Number.MAX_SAFE_INTEGER;
+          const bPrefectureOrder = prefectureOrder.get(b.prefecture) ?? Number.MAX_SAFE_INTEGER;
+          if (aPrefectureOrder !== bPrefectureOrder) {
+            return aPrefectureOrder - bPrefectureOrder;
+          }
+        }
         if (b.products.length !== a.products.length) return b.products.length - a.products.length;
         const priceDifference = b.products[0].price_val - a.products[0].price_val;
         if (priceDifference) return priceDifference;
@@ -862,7 +875,10 @@ def build_html(products, generated_at=None):
         "__TOTAL_COUNT__": str(len(products)),
         "__PENDING_COUNT__": str(pending_count),
         "__FETCH_ERROR_COUNT__": str(fetch_error_count),
-        "__PREFECTURE_OPTIONS__": pref_options_html(PREFECTURES_ORDER),
+        "__PREFECTURE_OPTIONS__": pref_options_html(
+            PREFECTURES_ORDER,
+            selected=DEFAULT_PREFECTURE,
+        ),
         "__PRODUCT_DATA__": json_for_html(products),
     }
     document = HTML_TEMPLATE

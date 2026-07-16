@@ -252,7 +252,7 @@
     <header class="app-header">
       <div class="eyebrow">BOOKOFF STOCK</div>
       <h1>高額ソフト公式掲載チェッカー</h1>
-      <p class="updated">最終更新: 2026-07-16 13:55:27 / 全 1321 商品 / 確認保留 15 件 / 取得失敗 0 件</p>
+      <p class="updated">最終更新: 2026-07-16 14:02:26 / 全 1321 商品 / 確認保留 15 件 / 取得失敗 0 件</p>
     </header>
 
     <main>
@@ -283,7 +283,7 @@
 <option value="埼玉県">埼玉県</option>
 <option value="千葉県">千葉県</option>
 <option value="東京都">東京都</option>
-<option value="神奈川県">神奈川県</option>
+<option value="神奈川県" selected>神奈川県</option>
 <option value="新潟県">新潟県</option>
 <option value="富山県">富山県</option>
 <option value="石川県">石川県</option>
@@ -348,6 +348,11 @@
     const searchLabel = document.getElementById("search-label");
     const prefectureField = document.getElementById("prefecture-field");
     const prefectureSelect = document.getElementById("prefecture-select");
+    const prefectureOrder = new Map(
+      Array.from(prefectureSelect.options)
+        .filter((option) => option.value)
+        .map((option, index) => [option.value, index])
+    );
     const results = document.getElementById("results");
     const resultSummary = document.getElementById("result-summary");
     const tabs = Array.from(document.querySelectorAll("[data-mode]"));
@@ -485,6 +490,13 @@
         store.products.sort((a, b) => b.price_val - a.price_val || a.no - b.no);
       }
       stores.sort((a, b) => {
+        if (!selectedPrefecture) {
+          const aPrefectureOrder = prefectureOrder.get(a.prefecture) ?? Number.MAX_SAFE_INTEGER;
+          const bPrefectureOrder = prefectureOrder.get(b.prefecture) ?? Number.MAX_SAFE_INTEGER;
+          if (aPrefectureOrder !== bPrefectureOrder) {
+            return aPrefectureOrder - bPrefectureOrder;
+          }
+        }
         if (b.products.length !== a.products.length) return b.products.length - a.products.length;
         const priceDifference = b.products[0].price_val - a.products[0].price_val;
         if (priceDifference) return priceDifference;
