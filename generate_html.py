@@ -594,6 +594,7 @@ HTML_TEMPLATE = """<!doctype html>
     const searchLabel = document.getElementById("search-label");
     const prefectureField = document.getElementById("prefecture-field");
     const prefectureSelect = document.getElementById("prefecture-select");
+    const defaultPrefecture = __DEFAULT_PREFECTURE__;
     const prefectureOrder = new Map(
       Array.from(prefectureSelect.options)
         .filter((option) => option.value)
@@ -841,6 +842,12 @@ HTML_TEMPLATE = """<!doctype html>
     }
     searchInput.addEventListener("input", render);
     prefectureSelect.addEventListener("change", render);
+    window.addEventListener("pageshow", () => {
+      if (prefectureSelect.value === defaultPrefecture) return;
+      prefectureSelect.value = defaultPrefecture;
+      if (currentMode === "stores") render();
+    });
+    prefectureSelect.value = defaultPrefecture;
     setMode("stores");
   </script>
 </body>
@@ -875,6 +882,7 @@ def build_html(products, generated_at=None):
         "__TOTAL_COUNT__": str(len(products)),
         "__PENDING_COUNT__": str(pending_count),
         "__FETCH_ERROR_COUNT__": str(fetch_error_count),
+        "__DEFAULT_PREFECTURE__": json_for_html(DEFAULT_PREFECTURE),
         "__PREFECTURE_OPTIONS__": pref_options_html(
             PREFECTURES_ORDER,
             selected=DEFAULT_PREFECTURE,

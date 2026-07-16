@@ -210,6 +210,9 @@ class BuildHtmlTests(unittest.TestCase):
         self.assertNotIn('no_stock: "在庫なし"', document)
         self.assertIn('<option value="">全国</option>', document)
         self.assertIn('<option value="神奈川県" selected>', document)
+        self.assertIn('const defaultPrefecture = "神奈川県";', document)
+        self.assertIn("prefectureSelect.value = defaultPrefecture;", document)
+        self.assertIn('window.addEventListener("pageshow"', document)
         self.assertIn("if (!selectedPrefecture)", document)
         self.assertIn("aPrefectureOrder - bPrefectureOrder", document)
 

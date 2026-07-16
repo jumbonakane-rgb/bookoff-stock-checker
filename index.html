@@ -252,7 +252,7 @@
     <header class="app-header">
       <div class="eyebrow">BOOKOFF STOCK</div>
       <h1>高額ソフト公式掲載チェッカー</h1>
-      <p class="updated">最終更新: 2026-07-16 14:02:26 / 全 1321 商品 / 確認保留 15 件 / 取得失敗 0 件</p>
+      <p class="updated">最終更新: 2026-07-16 14:08:08 / 全 1321 商品 / 確認保留 15 件 / 取得失敗 0 件</p>
     </header>
 
     <main>
@@ -348,6 +348,7 @@
     const searchLabel = document.getElementById("search-label");
     const prefectureField = document.getElementById("prefecture-field");
     const prefectureSelect = document.getElementById("prefecture-select");
+    const defaultPrefecture = "神奈川県";
     const prefectureOrder = new Map(
       Array.from(prefectureSelect.options)
         .filter((option) => option.value)
@@ -595,6 +596,12 @@
     }
     searchInput.addEventListener("input", render);
     prefectureSelect.addEventListener("change", render);
+    window.addEventListener("pageshow", () => {
+      if (prefectureSelect.value === defaultPrefecture) return;
+      prefectureSelect.value = defaultPrefecture;
+      if (currentMode === "stores") render();
+    });
+    prefectureSelect.value = defaultPrefecture;
     setMode("stores");
   </script>
 </body>
