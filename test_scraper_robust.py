@@ -31,11 +31,16 @@ def modal_html(title, declared_count, stores):
     """
 
 
-def product_html(*modals, json_jan=JAN, displayed_jan=JAN):
-    return f"""
-    <html>
-      <head>
-        <link rel="canonical" href="{PRODUCT_URL}">
+def product_html(
+    *modals,
+    json_jan=JAN,
+    displayed_jan=JAN,
+    include_json=True,
+    h1_title=PRODUCT_TITLE,
+):
+    json_html = ""
+    if include_json:
+        json_html = f"""
         <script type="application/ld+json">
           {{
             "@type": "Product",
@@ -45,8 +50,20 @@ def product_html(*modals, json_jan=JAN, displayed_jan=JAN):
             "gtin13": "{json_jan}"
           }}
         </script>
+        """
+    h1_html = (
+        f'<h1 class="productInformation__title">{h1_title}</h1>'
+        if h1_title is not None
+        else ""
+    )
+    return f"""
+    <html>
+      <head>
+        <link rel="canonical" href="{PRODUCT_URL}">
+        {json_html}
       </head>
       <body>
+        {h1_html}
         <table><tr><th>JAN</th><td>{displayed_jan}</td></tr></table>
         {''.join(modals)}
       </body>
@@ -118,7 +135,7 @@ class StoreStockParsingTests(unittest.TestCase):
         self.assertEqual(result["stock_status"], scraper.STATUS_MODAL_INVALID)
         self.assertEqual(result["stores"], [])
 
-    def test_duplicate_store_rows_are_rejected_even_when_count_matches(self):
+    def test_duplicate_valid_store_rows_are_deduplicated_and_kept(self):
         duplicate = modal_html(
             PRODUCT_TITLE,
             2,
@@ -134,7 +151,69 @@ class StoreStockParsingTests(unittest.TestCase):
             PRODUCT_TITLE,
         )
 
-        self.assertEqual(result["stock_status"], scraper.STATUS_MODAL_INVALID)
+        self.assertEqual(result["stock_status"], scraper.STATUS_AVAILABLE)
+        self.assertEqual(result["stores"], [("大阪心斎橋店", "大阪府大阪市")])
+        self.assertIn("重複", result["status_reason"])
+
+    def test_valid_store_rows_are_kept_when_declared_count_is_stale(self):
+        stale_count = modal_html(
+            PRODUCT_TITLE,
+            2,
+            [("大阪心斎橋店", "大阪府大阪市", "https://www.bookoff.co.jp/shop/shop20345.html")],
+        )
+
+        result = scraper.parse_store_stock_html(
+            product_html(stale_count),
+            PRODUCT_URL,
+            PRODUCT_TITLE,
+        )
+
+        self.assertEqual(result["stock_status"], scraper.STATUS_AVAILABLE)
+        self.assertEqual(result["stores"], [("大阪心斎橋店", "大阪府大阪市")])
+        self.assertIn("店舗数表記2件・店舗行1件", result["status_reason"])
+
+    def test_missing_jan_is_accepted_when_page_identity_matches(self):
+        store_modal = modal_html(
+            PRODUCT_TITLE,
+            1,
+            [("大阪心斎橋店", "大阪府大阪市", "https://www.bookoff.co.jp/shop/shop20345.html")],
+        )
+
+        result = scraper.parse_store_stock_html(
+            product_html(store_modal, json_jan="", displayed_jan=""),
+            PRODUCT_URL,
+            PRODUCT_TITLE,
+        )
+
+        self.assertEqual(result["stock_status"], scraper.STATUS_AVAILABLE)
+        self.assertEqual(result["stores"], [("大阪心斎橋店", "大阪府大阪市")])
+
+    def test_missing_json_ld_is_accepted_when_page_identity_matches(self):
+        store_modal = modal_html(
+            PRODUCT_TITLE,
+            1,
+            [("大阪心斎橋店", "大阪府大阪市", "https://www.bookoff.co.jp/shop/shop20345.html")],
+        )
+
+        result = scraper.parse_store_stock_html(
+            product_html(store_modal, include_json=False),
+            PRODUCT_URL,
+            PRODUCT_TITLE,
+        )
+
+        self.assertEqual(result["stock_status"], scraper.STATUS_AVAILABLE)
+        self.assertEqual(result["stores"], [("大阪心斎橋店", "大阪府大阪市")])
+
+    def test_missing_product_heading_is_rejected(self):
+        zero_store_modal = modal_html(PRODUCT_TITLE, 0, [])
+
+        result = scraper.parse_store_stock_html(
+            product_html(zero_store_modal, h1_title=None),
+            PRODUCT_URL,
+            PRODUCT_TITLE,
+        )
+
+        self.assertEqual(result["stock_status"], scraper.STATUS_IDENTITY_MISMATCH)
 
     def test_jan_mismatch_is_not_treated_as_no_stock(self):
         zero_store_modal = modal_html(PRODUCT_TITLE, 0, [])
@@ -170,6 +249,18 @@ class StoreStockParsingTests(unittest.TestCase):
         )
 
         self.assertEqual(result["stock_status"], scraper.STATUS_NO_STOCK)
+        self.assertEqual(result["stores"], [])
+
+    def test_zero_rows_without_numeric_store_count_remain_unverified(self):
+        malformed = modal_html(PRODUCT_TITLE, 0, []).replace("：0店", "：店")
+
+        result = scraper.parse_store_stock_html(
+            product_html(malformed),
+            PRODUCT_URL,
+            PRODUCT_TITLE,
+        )
+
+        self.assertEqual(result["stock_status"], scraper.STATUS_MODAL_INVALID)
         self.assertEqual(result["stores"], [])
 
     def test_age_verification_form_is_validated(self):

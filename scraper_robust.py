@@ -158,7 +158,7 @@ def complete_age_verification(session):
 
 
 def parse_store_stock_html(html, detail_url, expected_title):
-    """商品詳細HTMLを商品ID・商品名・JAN・店舗モーダルの順に照合する。"""
+    """商品詳細HTMLを商品ID・商品名・店舗モーダルの順に照合する。"""
     soup = BeautifulSoup(html, "html.parser")
     target_id = item_id_from_url(detail_url)
 
@@ -168,36 +168,44 @@ def parse_store_stock_html(html, detail_url, expected_title):
             reason="年齢確認ページのため対象商品の店舗情報を照合できません",
         )
 
-    product = find_product_json_ld(soup)
-    if not product:
-        return stock_result(STATUS_IDENTITY_MISMATCH, reason="商品JSON-LDが見つかりません")
-
-    page_title = str(product.get("name") or "").strip()
-    product_urls = [str(product.get("@id") or ""), str(product.get("url") or "")]
     canonical_el = soup.select_one('link[rel="canonical"]')
     canonical_url = canonical_el.get("href", "") if canonical_el else ""
-    json_jan = str(product.get("gtin13") or "").strip()
+    title_el = soup.select_one("h1.productInformation__title")
+    page_title = title_el.get_text(" ", strip=True) if title_el else ""
+
+    product = find_product_json_ld(soup)
+    product_title = str(product.get("name") or "").strip() if product else ""
+    product_urls = (
+        [str(product.get("@id") or ""), str(product.get("url") or "")]
+        if product
+        else []
+    )
+    json_jan = str(product.get("gtin13") or "").strip() if product else ""
     displayed_jan = table_value(soup, "JAN").strip()
+    resolved_jan = json_jan or displayed_jan
 
     identity_errors = []
     if not target_id:
         identity_errors.append("URLの商品IDを抽出できません")
     if target_id and item_id_from_url(canonical_url) != target_id:
         identity_errors.append("canonical URLの商品IDが一致しません")
-    if target_id and not any(item_id_from_url(url) == target_id for url in product_urls):
-        identity_errors.append("JSON-LDの商品IDが一致しません")
+    if not page_title:
+        identity_errors.append("商品ページの見出しが見つかりません")
     if expected_title and normalize_text(page_title) != normalize_text(expected_title):
         identity_errors.append("検索結果と商品ページの商品名が一致しません")
-    if not json_jan or not displayed_jan:
-        identity_errors.append("JANを二重確認できません")
-    elif json_jan != displayed_jan:
+    if product:
+        if target_id and not any(item_id_from_url(url) == target_id for url in product_urls):
+            identity_errors.append("JSON-LDの商品IDが一致しません")
+        if not product_title or normalize_text(product_title) != normalize_text(page_title):
+            identity_errors.append("JSON-LDと商品ページの商品名が一致しません")
+    if json_jan and displayed_jan and json_jan != displayed_jan:
         identity_errors.append("JSON-LDと表示欄のJANが一致しません")
 
     if identity_errors:
         return stock_result(
             STATUS_IDENTITY_MISMATCH,
             reason=" / ".join(identity_errors),
-            jan=json_jan or displayed_jan,
+            jan=resolved_jan,
         )
 
     matching_modals = []
@@ -211,7 +219,7 @@ def parse_store_stock_html(html, detail_url, expected_title):
         return stock_result(
             STATUS_MODAL_INVALID,
             reason=f"対象商品と一致する店舗情報欄が{len(matching_modals)}件です",
-            jan=json_jan,
+            jan=resolved_jan,
         )
 
     modal = matching_modals[0]
@@ -221,7 +229,7 @@ def parse_store_stock_html(html, detail_url, expected_title):
         return stock_result(
             STATUS_MODAL_INVALID,
             reason=f"店舗行{len(store_rows)}件と店舗リンク{len(store_links)}件が一致しません",
-            jan=json_jan,
+            jan=resolved_jan,
         )
 
     all_stores = []
@@ -247,23 +255,17 @@ def parse_store_stock_html(html, detail_url, expected_title):
         return stock_result(
             STATUS_MODAL_INVALID,
             reason=f"正規の店舗詳細URLでない店舗行が{len(invalid_store_urls)}件あります",
-            jan=json_jan,
+            jan=resolved_jan,
         )
 
     if len(all_stores) != len(store_links):
         return stock_result(
             STATUS_MODAL_INVALID,
             reason=f"店舗リンク{len(store_links)}件のうち店名を確認できたのは{len(all_stores)}件です",
-            jan=json_jan,
+            jan=resolved_jan,
         )
 
     unique_stores = sorted(set(all_stores), key=lambda value: (value[1], value[0]))
-    if len(unique_stores) != len(all_stores):
-        return stock_result(
-            STATUS_MODAL_INVALID,
-            reason=f"店舗一覧{len(all_stores)}件に重複行があります",
-            jan=json_jan,
-        )
     heading_el = modal.select_one(".modalStoreInformation__heading")
     heading = heading_el.get_text(" ", strip=True) if heading_el else ""
     count_match = re.search(r"([\d,]+)店", heading)
@@ -271,19 +273,29 @@ def parse_store_stock_html(html, detail_url, expected_title):
         return stock_result(
             STATUS_MODAL_INVALID,
             reason="店舗情報欄の店舗数を確認できません",
-            jan=json_jan,
+            jan=resolved_jan,
         )
 
     declared_count = int(count_match.group(1).replace(",", ""))
-    if declared_count != len(all_stores):
+    if not unique_stores and declared_count != 0:
         return stock_result(
             STATUS_MODAL_INVALID,
-            reason=f"店舗数表記{declared_count}件と店舗一覧{len(unique_stores)}件が一致しません",
-            jan=json_jan,
+            reason=f"店舗数表記は{declared_count}件ですが有効な店舗行がありません",
+            jan=resolved_jan,
         )
 
     status = STATUS_AVAILABLE if unique_stores else STATUS_NO_STOCK
-    return stock_result(status, stores=unique_stores, jan=json_jan)
+    notes = []
+    if len(unique_stores) != len(all_stores):
+        notes.append(f"重複する店舗行{len(all_stores) - len(unique_stores)}件を統合")
+    if declared_count != len(all_stores):
+        notes.append(f"店舗数表記{declared_count}件・店舗行{len(all_stores)}件")
+    return stock_result(
+        status,
+        stores=unique_stores,
+        reason=" / ".join(notes),
+        jan=resolved_jan,
+    )
 
 
 def fetch_store_stock(detail_url, expected_title, max_retries=4):
